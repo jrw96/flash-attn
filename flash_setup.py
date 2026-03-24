@@ -6,7 +6,7 @@ setup(
     ext_modules=[
         CUDAExtension(
             name="flash_attn",
-            sources=["flash_attn_binding.cpp", "flash_attn.cu"],
+            sources=["csrc/flash_attn_binding.cpp", "csrc/flash_attn.cu"],
         )
     ],
     cmdclass={"build_ext": BuildExtension},

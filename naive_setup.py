@@ -6,7 +6,7 @@ setup(
     ext_modules=[
         CUDAExtension(
             name="naive_attn",
-            sources=["naive_attn_binding.cpp", "naive_attn.cu"],
+            sources=["csrc/naive_attn_binding.cpp", "csrc/naive_attn.cu"],
             libraries=["cublas"],
         )
     ],
