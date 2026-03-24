@@ -1,3 +1,6 @@
+#include <float.h>
+#include <stdio.h>
+
 #define Br 32
 #define Bc 32
 
