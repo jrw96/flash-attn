@@ -1,8 +1,8 @@
 #include <float.h>
 #include <stdio.h>
 
-#define Br 64
-#define Bc 64
+#define Br 32
+#define Bc 32
 
 template <int D>
 __global__ void flash_attn(float *Q, float *K, float *V, float *O, int N) {
