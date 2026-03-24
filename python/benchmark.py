@@ -37,7 +37,7 @@ def pytorch_attn(Q, K, V):
 
 
 def run_benchmarks(d=64):
-    seq_lengths = [512, 1024, 2048, 4096]
+    seq_lengths = [512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]
 
     results = {
         "naive": {"time": [], "memory": []},
