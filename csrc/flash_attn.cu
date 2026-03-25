@@ -10,15 +10,17 @@ __global__ void flash_attn(float *Q, float *K, float *V, float *O, int N) {
     int tid = threadIdx.x;
     int q_row = q_tile_idx + tid;
 
-    if (q_row >= N) return;
+    bool valid = (q_row < N);
 
 
     float q_reg[D];
     float o_reg[D];
 
-    for (int i = 0; i < D; i++) {
-        q_reg[i] = Q[q_row*D + i];
-        o_reg[i] = 0.0f;
+    if (valid) {
+        for (int i = 0; i < D; i++) {
+            q_reg[i] = Q[q_row*D + i];
+            o_reg[i] = 0.0f;
+        }
     }
 
     __shared__ float K_tile[Bc][D];
@@ -38,40 +40,44 @@ __global__ void flash_attn(float *Q, float *K, float *V, float *O, int N) {
 
         __syncthreads();
 
-        float s[Bc];
-        float m_new = m;
-        for (int j = 0; j < Bc; j++) {
-            s[j] = 0.0f;
-            for (int i = 0; i < D; i++) {
-                s[j] += q_reg[i]*K_tile[j][i];
+        if (valid) {
+            float s[Bc];
+            float m_new = m;
+            for (int j = 0; j < Bc; j++) {
+                s[j] = 0.0f;
+                for (int i = 0; i < D; i++) {
+                    s[j] += q_reg[i]*K_tile[j][i];
+                }
+                s[j] *= scale;
+                m_new = fmaxf(m_new, s[j]); // Track running max
             }
-            s[j] *= scale;
-            m_new = fmaxf(m_new, s[j]); // Track running max
-        }
 
-        float correction = expf(m - m_new);
-        float l_new = l*correction;
+            float correction = expf(m - m_new);
+            float l_new = l*correction;
 
-        for (int i = 0; i < D; i++) {
-            o_reg[i] *= correction;
-        }
-
-        for (int j = 0; j < Bc; j++) {
-            float pj = expf(s[j] - m_new);
-            l_new += pj;
             for (int i = 0; i < D; i++) {
-                o_reg[i] += pj * V_tile[j][i];
+                o_reg[i] *= correction;
             }
-        }
 
-        m = m_new;
-        l = l_new;
+            for (int j = 0; j < Bc; j++) {
+                float pj = expf(s[j] - m_new);
+                l_new += pj;
+                for (int i = 0; i < D; i++) {
+                    o_reg[i] += pj * V_tile[j][i];
+                }
+            }
+
+            m = m_new;
+            l = l_new;
+        }
 
         __syncthreads();
     }
 
-    for (int i = 0; i < D; i++) {
-        O[q_row*D + i] = o_reg[i] / l;
+    if (valid) {
+        for (int i = 0; i < D; i++) {
+            O[q_row*D + i] = o_reg[i] / l;
+        }
     }
 
 }
