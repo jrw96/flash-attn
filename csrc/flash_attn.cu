@@ -52,19 +52,15 @@ __global__ void flash_attn(float *Q, float *K, float *V, float *O, int N) {
         float correction = expf(m - m_new);
         float l_new = l*correction;
 
-        float p[Bc];
-        for (int j = 0; j < Bc; j++) {
-            p[j] = expf(s[j] - m_new);
-            l_new += p[j];
-        }
-
         for (int i = 0; i < D; i++) {
-                o_reg[i] *= correction;
+            o_reg[i] *= correction;
         }
 
         for (int j = 0; j < Bc; j++) {
+            float pj = expf(s[j] - m_new);
+            l_new += pj;
             for (int i = 0; i < D; i++) {
-                o_reg[i] += p[j] * V_tile[j][i];
+                o_reg[i] += pj * V_tile[j][i];
             }
         }
 
