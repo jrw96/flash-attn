@@ -189,7 +189,7 @@ __global__ void flash_attn_warp(float *Q, float *K, float *V, float *O,
 
 void flash_attn_v2_dispatch(float *Q, float *K, float *V, float *O,
                             int N, int d) {
-    constexpr int NUM_WARPS = 4;
+    constexpr int NUM_WARPS = 32;
     constexpr int Br = NUM_WARPS;
     const int grid  = (N + Br - 1) / Br;
     const int block = NUM_WARPS * WARP_SIZE;
