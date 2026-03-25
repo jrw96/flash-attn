@@ -1,11 +1,11 @@
 import time
 
 import matplotlib.pyplot as plt
-import naive_attn
 import torch
 import torch.nn.functional as F
 from torch.nn.attention import SDPBackend, sdpa_kernel
 
+import naive_attn
 import flash_attn
 
 
