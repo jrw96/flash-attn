@@ -61,13 +61,9 @@ __global__ void softmax(float *M, int N) {
 }
 
 
-void naive_attn(float *Q, float *K, float *V, float *O, int N, int d) {
+void naive_attn(float *Q, float *K, float *V, float *C, float *O, int N, int d) {
     cublasHandle_t handle;
     cublasCreate(&handle);
-
-    // intermediate output matrix
-    float *C;
-    cudaMalloc(&C, N*N*sizeof(float));
 
     float alpha = 1.0f/sqrtf((float) d);
     float beta = 0.0f;
