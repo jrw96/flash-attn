@@ -59,7 +59,7 @@ def run_benchmarks(d=64):
         for label, fn in [
             ("naive", lambda Q, K, V: naive_attn.naive_attn(Q, K, V)),
             ("flash", lambda Q, K, V: flash_attn.flash_attn(Q, K, V)),
-            ("pytorch", pytorch_attn),
+            ("pytorch", lambda Q, K, V: pytorch_attn(Q, K, V)),
         ]:
             t = benchmark(fn, Q, K, V)
             m = measure_memory(fn, Q, K, V)
