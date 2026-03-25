@@ -75,6 +75,5 @@ void naive_attn(float *Q, float *K, float *V, float *C, float *O, int N, int d) 
     beta = 0.0f;
     cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, d, N, N, &alpha, V, d, C, N, &beta, O, d);
 
-    cudaFree(C);
     cublasDestroy(handle);
 }
