@@ -102,9 +102,9 @@ def plot(seq_lengths, results, d):
     ax2.grid(True)
 
     plt.tight_layout()
-    plt.savefig("results/benchmarks.png", dpi=150)
+    plt.savefig(f"results/benchmarks_{d}.png", dpi=150)
     plt.show()
-    print("Saved to results/benchmarks.png")
+    print(f"Saved to results/benchmarks_{d}.png")
 
 
 if __name__ == "__main__":
