@@ -20,7 +20,7 @@ torch::Tensor naive_attn_forward(
 
     TORCH_CHECK(d == 64 || d == 128, "d must be 64 or 128");
 
-    auto C = torch::zeros({N, d}, Q.options()); // Intermediate storage matrix
+    auto C = torch::zeros({N, N}, Q.options()); // Intermediate storage matrix
     auto O = torch::zeros({N, d}, Q.options());
 
     naive_attn(
