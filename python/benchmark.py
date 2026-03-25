@@ -7,6 +7,7 @@ from torch.nn.attention import SDPBackend, sdpa_kernel
 
 import naive_attn
 import flash_attn
+import flash_attn_v2
 
 
 def benchmark(fn, Q, K, V, warmup=10, runs=100):
@@ -47,6 +48,7 @@ def run_benchmarks(d=64):
     results = {
         "naive": {"time": [], "memory": []},
         "flash": {"time": [], "memory": []},
+        "flashv2": {"time": [], "memory": []},
         "pytorch": {"time": [], "memory": []},
     }
 
@@ -59,6 +61,7 @@ def run_benchmarks(d=64):
         for label, fn in [
             ("naive", lambda Q, K, V: naive_attn.naive_attn(Q, K, V)),
             ("flash", lambda Q, K, V: flash_attn.flash_attn(Q, K, V)),
+            ("flash_v2", lambda Q, K, V: flash_attn_v2.flash_attn_v2(Q, K, V)),
             ("pytorch", lambda Q, K, V: pytorch_attn(Q, K, V)),
         ]:
             t = benchmark(fn, Q, K, V)
