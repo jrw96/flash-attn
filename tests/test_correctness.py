@@ -34,7 +34,7 @@ def run_tests():
 
             # Flash kernel v2
             O_flash_v2 = flash_attn_v2.flash_attn_v2(Q, K, V)
-            test(f"flash  N={N:4d} d={d}", O_flash_v2, O_ref)
+            test(f"flash_v2  N={N:4d} d={d}", O_flash_v2, O_ref)
 
             # Naive vs flash directly
             test(f"naive==flash N={N:4d} d={d}", O_naive, O_flash)

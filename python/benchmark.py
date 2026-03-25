@@ -48,7 +48,7 @@ def run_benchmarks(d=64):
     results = {
         "naive": {"time": [], "memory": []},
         "flash": {"time": [], "memory": []},
-        "flashv2": {"time": [], "memory": []},
+        "flash_v2": {"time": [], "memory": []},
         "pytorch": {"time": [], "memory": []},
     }
 
@@ -79,7 +79,12 @@ def plot(seq_lengths, results, d):
         f"Attention Benchmark — d={d}, GPU: {torch.cuda.get_device_name()}"
     )
 
-    colors = {"naive": "tab:red", "flash": "tab:blue", "pytorch": "tab:green"}
+    colors = {
+        "naive": "tab:red",
+        "flash": "tab:blue",
+        "flash_v2": "tab:orange",
+        "pytorch": "tab:green",
+    }
 
     for label, data in results.items():
         ax1.plot(
