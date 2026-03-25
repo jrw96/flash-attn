@@ -1,12 +1,13 @@
 import time
 
-import flash_attn
-import flash_attn_v2
 import matplotlib.pyplot as plt
-import naive_attn
 import torch
 import torch.nn.functional as F
 from torch.nn.attention import SDPBackend, sdpa_kernel
+
+import naive_attn
+import flash_attn
+import flash_attn_v2
 
 
 def benchmark(fn, Q, K, V, warmup=10, runs=100):
