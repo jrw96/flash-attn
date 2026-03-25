@@ -1,9 +1,11 @@
-import torch
-import torch.nn.functional as F
 import time
+
+import flash_attn
 import matplotlib.pyplot as plt
 import naive_attn
-import flash_attn
+import torch
+import torch.nn.functional as F
+from torch.nn.attention import SDPBackend, sdpa_kernel
 
 
 def benchmark(fn, Q, K, V, warmup=10, runs=100):
@@ -32,9 +34,7 @@ def measure_memory(fn, Q, K, V):
 
 def pytorch_attn(Q, K, V):
     with torch.no_grad():
-        with torch.backends.cuda.sdp_kernel(
-            enable_flash=False, enable_math=True, enable_mem_efficient=False
-        ):
+        with sdpa_kernel(SDPBackend.MATH):
             return F.scaled_dot_product_attention(
                 Q.unsqueeze(0), K.unsqueeze(0), V.unsqueeze(0)
             ).squeeze(0)
