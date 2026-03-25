@@ -43,7 +43,7 @@ def pytorch_attn(Q, K, V):
 
 
 def run_benchmarks(d=64):
-    seq_lengths = [512, 1024, 2048, 4096, 8192]
+    seq_lengths = [512, 1024, 2048, 4096, 8192, 16384, 32768]
 
     results = {
         "naive": {"time": [], "memory": []},
@@ -69,6 +69,11 @@ def run_benchmarks(d=64):
             results[label]["time"].append(t)
             results[label]["memory"].append(m)
             print(f"  {label:8s} | {t:.3f} ms | {m:.1f} MB")
+
+            import json
+
+            with open(f"result_{d}.json", "w") as fp:
+                json.dump(results, fp)
 
     return seq_lengths, results
 
