@@ -31,9 +31,13 @@ def measure_memory(fn, Q, K, V):
 
 
 def pytorch_attn(Q, K, V):
-    return F.scaled_dot_product_attention(
-        Q.unsqueeze(0), K.unsqueeze(0), V.unsqueeze(0)
-    ).squeeze(0)
+    with torch.no_grad():
+        with torch.backends.cuda.sdp_kernel(
+            enable_flash=False, enable_math=True, enable_mem_efficient=False
+        ):
+            return F.scaled_dot_product_attention(
+                Q.unsqueeze(0), K.unsqueeze(0), V.unsqueeze(0)
+            ).squeeze(0)
 
 
 def run_benchmarks(d=64):
