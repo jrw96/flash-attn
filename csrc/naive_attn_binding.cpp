@@ -1,6 +1,6 @@
 #include <torch/extension.h>
 
-void naive_attn(float *Q, float *K, float *V, float *O, int N, int d);
+void naive_attn(float *Q, float *K, float *V, float *C, float *O, int N, int d);
 
 torch::Tensor naive_attn_forward(
     torch::Tensor Q,
