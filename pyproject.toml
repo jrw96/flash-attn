@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools", "wheel", "torch"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flash-attn-scratch"
+version = "0.1.0"
+description = "FlashAttention forward pass from scratch in CUDA C"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = [
+    "torch",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pytest",
+    "matplotlib",
+]
