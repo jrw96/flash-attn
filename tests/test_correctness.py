@@ -1,8 +1,9 @@
 import torch
 import torch.nn.functional as F
-import naive_attn
+
 import flash_attn
 import flash_attn_v2
+import naive_attn
 
 
 def test(label, O_custom, O_ref, tol=1e-3):
