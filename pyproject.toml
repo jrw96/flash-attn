@@ -22,3 +22,9 @@ dev = [
 
 [tool.setuptools]
 packages = []
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["naive_attn", "flash_attn", "flash_attn_v2"]
