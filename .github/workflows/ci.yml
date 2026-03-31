@@ -42,8 +42,8 @@ jobs:
           echo "Found cuBLAS headers in: $CUBLAS_DIR"
           for f in csrc/*.cu; do
             echo "Checking $f..."
-            nvcc --syntax-only -std=c++17 \
+            nvcc -c -std=c++17 \
               -I/usr/local/cuda/include \
               -I"$CUBLAS_DIR" \
-              "$f" 2>&1
+              "$f" && rm -f *.o
           done
