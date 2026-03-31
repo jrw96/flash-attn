@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel", "torch"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "flash-attn-scratch"
+name = "flash-attn"
 version = "0.1.0"
 description = "FlashAttention forward pass from scratch in CUDA C"
 readme = "README.md"
