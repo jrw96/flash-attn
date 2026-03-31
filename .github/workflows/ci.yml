@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install linters
+        run: pip install ruff
+
+      - name: Check formatting
+        run: ruff format --check python/ tests/
+
+      - name: Lint
+        run: ruff check python/ tests/
+
+  check-cuda-syntax:
+    runs-on: ubuntu-latest
+    container:
+      image: nvidia/cuda:12.4.0-devel-ubuntu22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify CUDA headers
+        run: |
+          find /usr -name "cublas_v2.h" 2>/dev/null
+
+      - name: Syntax check CUDA sources
+        run: |
+          CUBLAS_DIR=$(dirname $(find /usr -name "cublas_v2.h" -print -quit 2>/dev/null))
+          echo "Found cuBLAS headers in: $CUBLAS_DIR"
+          for f in csrc/*.cu; do
+            echo "Checking $f..."
+            nvcc --syntax-only -std=c++17 \
+              -I/usr/local/cuda/include \
+              -I"$CUBLAS_DIR" \
+              "$f" 2>&1
+          done
