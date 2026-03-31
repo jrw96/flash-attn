@@ -5,9 +5,9 @@ import torch
 import torch.nn.functional as F
 from torch.nn.attention import SDPBackend, sdpa_kernel
 
-import naive_attn
 import flash_attn
 import flash_attn_v2
+import naive_attn
 
 
 def benchmark(fn, Q, K, V, warmup=10, runs=100):
@@ -80,9 +80,7 @@ def run_benchmarks(d=64):
 
 def plot(seq_lengths, results, d):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-    fig.suptitle(
-        f"Attention Benchmark — d={d}, GPU: {torch.cuda.get_device_name()}"
-    )
+    fig.suptitle(f"Attention Benchmark — d={d}, GPU: {torch.cuda.get_device_name()}")
 
     colors = {
         "naive": "tab:red",
