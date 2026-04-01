@@ -54,7 +54,7 @@ Memory scaling is O(N) for flash (bounded by the KV tile size in shared memory) 
 |  8,192 | 20.11 ms |   92.86 ms |    57.81 ms | 20.00 ms |
 | 32,768 |   313 ms |   1,255 ms |      878 ms |   332 ms |
 
-V2 beats v1 consistently at d=128 (1.4–3.4×), where v1's register spilling is most severe. Both flash kernels remain slower than cuBLAS. V2 regresses against v1 at d=64 for large N — the explanation is in the [profiling analysis](#why-v2-regresses-at-d64-for-large-n).
+V2 beats v1 consistently at d=128 (1.4-3.4×), where v1's register spilling is most severe. Both flash kernels remain slower than cuBLAS. V2 regresses against v1 at d=64 for large N — the explanation is in the [profiling analysis](#why-v2-regresses-at-d64-for-large-n). The naive baseline matches or slightly beats PyTorch SDPA on latency because it calls cuBLAS directly with raw pointers, bypassing PyTorch's dispatcher, autograd graph construction, and workspace allocation overhead.
 
 ### Correctness
 
@@ -235,6 +235,12 @@ These are concrete next steps, listed roughly in order of expected impact:
 3. **Causal masking.** Autoregressive inference requires upper-triangular masking. Tiles that fall entirely below the diagonal can be skipped, roughly halving total work for causal attention. Tiles that straddle the diagonal require per-element masking within the softmax computation.
 
 4. **Multi-head batched attention.** Extending from (N, d) to (B, H, N, d) tensors with batch and head dimensions parallelised across the grid. In production, the batch and head dimensions provide enough parallelism to saturate the GPU even at small N, which is the common case during autoregressive decoding.
+
+## Useful Reading
+
+- Aleksa Gordić's primer on FlashAttention, [ELI5: FlashAttention](https://gordicaleksa.medium.com/eli5-flash-attention-5c44017022ad)
+- And the associated github repository: [](https://github.com/gordicaleksa/pytorch-original-transformer)
+- A nice lecture on the CUDA side of things, by Prof. Mike Giles of Oxford University: [FlashAttention: an interesting CUDA application](https://people.maths.ox.ac.uk/gilesm/cuda/lecs/FlashAttention.pdf)
 
 ## References
 
