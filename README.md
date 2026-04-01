@@ -239,7 +239,7 @@ These are concrete next steps, listed roughly in order of expected impact:
 ## Useful Reading
 
 - Aleksa Gordić's primer on FlashAttention, [ELI5: FlashAttention](https://gordicaleksa.medium.com/eli5-flash-attention-5c44017022ad)
-- And the associated github repository: [](https://github.com/gordicaleksa/pytorch-original-transformer)
+- And the associated github repository: [gordicaleksa/pytorch-original-transformer](https://github.com/gordicaleksa/pytorch-original-transformer)
 - A nice lecture on the CUDA side of things, by Prof. Mike Giles of Oxford University: [FlashAttention: an interesting CUDA application](https://people.maths.ox.ac.uk/gilesm/cuda/lecs/FlashAttention.pdf)
 
 ## References
