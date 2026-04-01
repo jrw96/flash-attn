@@ -210,7 +210,22 @@ Same O(N) memory. 62 registers per thread (vs 219), 72.5% SM throughput (vs 10.5
 
 Requires a working CUDA toolkit and a pre-installed PyTorch with CUDA support. `--no-build-isolation` is required because `setup.py` imports `torch.utils.cpp_extension` at build time.
 
+If you are not sure whether you have the necessary version of PyTorch installed, the following commands should help:
+
 ```bash
+# Verify PyTorch CUDA is available
+python -c "import torch; assert torch.cuda.is_available(), 'CUDA not available'; print(f'PyTorch {torch.__version__}, CUDA {torch.version.cuda}')"
+ 
+# If not installed, install PyTorch with CUDA support (adjust cu126 to match your toolkit)
+pip install torch --index-url https://download.pytorch.org/whl/cu126
+```
+
+Once the correct version of PyTorch is available, the project can be built with:
+
+```bash
+# Recommended: install ninja for parallel compilation (10x faster build)
+pip install ninja
+
 # Install (builds all three CUDA extensions)
 pip install --no-build-isolation .
 
